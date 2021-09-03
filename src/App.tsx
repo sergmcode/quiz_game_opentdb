@@ -6,6 +6,8 @@ import { fetchQuizQuestions, Difficulty, QuestionState } from "./API";
 
 import { GlobalStyle, Wrapper } from "./App.styles";
 
+import { Reaction } from "./components/Reaction";
+
 const TOTAL_QUESTIONS = 10;
 
 export type AnswerObject = {
@@ -22,6 +24,9 @@ const App = () => {
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
+
+  const [finishOneQuestion, setFinishOneQuestion] = useState<boolean>(false);
+  const [correctAns, setCorrectAns] = useState<boolean>(false)
 
   useEffect(() => {
     console.log(questions);
@@ -45,6 +50,7 @@ const App = () => {
     if (!gameOver) {
       const answer = e.currentTarget.value;
       const correct = questions[number].correct_answer === answer;
+      setCorrectAns(correct)
       if (correct) {
         setScore((prev) => prev + 1);
       }
@@ -57,6 +63,7 @@ const App = () => {
       setUserAnswers((prev) => [...prev, answerObject]);
       // console.log(userAnswers);
     }
+    setFinishOneQuestion(true);
   };
 
   const nextQuestion = () => {
@@ -67,6 +74,7 @@ const App = () => {
     } else {
       setNumber(nextQuestion);
     }
+    setFinishOneQuestion(false);
   };
 
   return (
@@ -79,6 +87,8 @@ const App = () => {
             Start
           </button>
         ) : null}
+        {finishOneQuestion  ? <Reaction correct={correctAns} /> : null}
+
         {!gameOver ? <p className="score">Your Score: {score}</p> : null}
         {loading ? <p>Loading questions...</p> : null}
         {!loading && !gameOver && (

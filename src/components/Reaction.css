@@ -1,0 +1,8 @@
+.reaction_correct{
+  font-size: 3rem;
+  color: green;
+}
+.reaction_wrong{
+  font-size: 3rem;
+  color: red;
+}
